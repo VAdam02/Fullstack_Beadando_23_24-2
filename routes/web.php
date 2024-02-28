@@ -24,3 +24,5 @@ Route::get('/hello1', function () {
 });
 
 Route::get('/hello2', [HelloController::class, 'index']);
+
+Route::get('/listAll', [HelloController::class, 'listAll']);
