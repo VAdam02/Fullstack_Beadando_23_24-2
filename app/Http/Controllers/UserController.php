@@ -28,8 +28,17 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //TODO
-        return response('User created', 201);
+        $validated = $request->validate([
+            'name' => 'required',
+            'email' => 'required|unique:users',
+            'age' => 'required',
+            'phone' => 'nullable',
+            'password' => 'required'
+        ]);
+
+        $user = User::create($validated);
+
+        return redirect()->route('users.show', ['user' => $user->id . ""]);
     }
 
     /**
@@ -37,6 +46,10 @@ class UserController extends Controller
      */
     public function show(string $id)
     {
+        if (!User::find($id)) {
+            return response("User $id not found", 404);
+        }
+
         return "Show user with id: $id<br>" . User::find($id)->toJson();
     }
 
@@ -45,6 +58,10 @@ class UserController extends Controller
      */
     public function edit(string $id)
     {
+        if (!User::find($id)) {
+            return response("User $id not found", 404);
+        }
+
         return "Edit form for user with id: $id<br>" . User::find($id)->toJson();
     }
 
@@ -53,8 +70,25 @@ class UserController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //TODO
-        return response("User $id updated", 200);
+        $validated = $request->validate([
+            'name' => 'required',
+            'email' => 'required|unique:users,' . $id,
+            'age' => 'required',
+            'phone' => 'nullable',
+            'password' => 'required'
+        ]);
+
+        $user = User::find($id);
+
+        if (!$user) { return response("User $id not found", 404); }
+
+        try {
+            $user->update($validated);
+        } catch (\Exception $e) {
+            return response($e->getMessage(), 500);
+        }
+
+        return redirect()->route('users.show', ['user' => $id]);
     }
 
     /**
@@ -62,7 +96,13 @@ class UserController extends Controller
      */
     public function destroy(string $id)
     {
-        //TODO
-        return response("User deleted $id", 200);
+        //$user = User::findOrFail($id);
+
+        $user = User::find($id);
+        if (!$user) { return response("User $id not found", 404); }
+
+        $user->delete();
+
+        return redirect("/users");
     }
 }
