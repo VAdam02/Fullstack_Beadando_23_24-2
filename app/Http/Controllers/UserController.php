@@ -46,11 +46,10 @@ class UserController extends Controller
      */
     public function show(string $id)
     {
-        if (!User::find($id)) {
-            return response("User $id not found", 404);
-        }
+        $user = User::find($id);
+        if (!$user) { return response("User $id not found", 404); }
 
-        return "Show user with id: $id<br>" . User::find($id)->toJson();
+        return "Show user with id: $id<br>" . $user->toJson();
     }
 
     /**
@@ -58,11 +57,10 @@ class UserController extends Controller
      */
     public function edit(string $id)
     {
-        if (!User::find($id)) {
-            return response("User $id not found", 404);
-        }
+        $user = User::find($id);
+        if (!$user) { return response("User $id not found", 404); }
 
-        return "Edit form for user with id: $id<br>" . User::find($id)->toJson();
+        return "Edit form for user with id: $id<br>" . $user->toJson();
     }
 
     /**
@@ -79,14 +77,9 @@ class UserController extends Controller
         ]);
 
         $user = User::find($id);
-
         if (!$user) { return response("User $id not found", 404); }
 
-        try {
-            $user->update($validated);
-        } catch (\Exception $e) {
-            return response($e->getMessage(), 500);
-        }
+        $user->update($validated);
 
         return redirect()->route('users.show', ['user' => $id]);
     }
@@ -103,6 +96,6 @@ class UserController extends Controller
 
         $user->delete();
 
-        return redirect("/users");
+        return redirect()->route('users.index');
     }
 }
