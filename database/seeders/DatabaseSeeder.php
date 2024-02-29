@@ -50,21 +50,23 @@ class DatabaseSeeder extends Seeder
             ]));
         }
 
-        $posts = collect();
-        $postCount = rand(30, 50);
-        for ($i = 0; $i < $postCount; $i++) {
-            $posts->push(Post::factory()->create([
-
-            ]));
-        }
-
         $categories = collect();
         $categoryCount = rand(10, 20);
         for ($i = 0; $i < $categoryCount; $i++) {
-            $categories->push(Category::factory()->create([
-
-            ]));
+            $categories->push(Category::factory()->create());
         }
 
+        $posts = collect();
+        $postCount = rand(30, 50);
+        for ($i = 0; $i < $postCount; $i++) {
+            $post = Post::factory()->make();
+            $post->author()->associate($users->random());
+            $post->save();
+
+            $selectedCategories = $categories->random(rand(1, 5));
+            $post->categories()->attach($selectedCategories->pluck('id'));
+
+            $posts->push($post);
+        }
     }
 }
