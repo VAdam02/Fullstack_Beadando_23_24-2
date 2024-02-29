@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Post;
+use App\Models\User;
 
 class PostController extends Controller
 {
@@ -32,12 +33,20 @@ class PostController extends Controller
             'title' => 'required',
             'content' => 'required',
             'date' => 'nullable',
-            'public' => 'required'
+            'public' => 'required',
+            'categories' => 'nullable|array'
         ]);
 
-        if ($validated['date'] == null) { $validated['date'] = now(); }
+        if (!isset($validated["date"])) { $validated['date'] = now(); }
 
-        $post = Post::create($validated);
+        $post = Post::make($validated);
+
+        //TODO set to the logged in user
+        $post->author()->associate(User::find(1));
+
+        $post->save();
+
+        if (isset($validated['categories'])) { $post->categories()->sync($validated['categories']); }
 
         return redirect()->route('posts.show', ['post' => $post->id . ""]);
     }
@@ -73,7 +82,8 @@ class PostController extends Controller
             'title' => 'required',
             'content' => 'required',
             'date' => 'nullable',
-            'public' => 'required'
+            'public' => 'required',
+            'categories' => 'nullable|array'
         ]);
 
         if ($validated['date'] == null) { $validated['date'] = now(); }
@@ -82,6 +92,8 @@ class PostController extends Controller
         if (!$post) { return response("Post $id not found", 404); }
 
         $post->update($validated);
+
+        if (isset($validated['categories'])) { $post->categories()->sync($validated['categories']); }
 
         return redirect()->route('posts.show', ['post' => $post->id . ""]);
     }
@@ -97,5 +109,18 @@ class PostController extends Controller
         $post->delete();
 
         return "Post $id deleted";
+    }
+
+    public function full()
+    {
+        //$posts = Post::all();
+        $posts = Post::with('author', 'categories')->get();
+
+        foreach ($posts as $post) {
+            $post->author;
+            $post->categories;
+        }
+
+        return $posts->toJson();
     }
 }

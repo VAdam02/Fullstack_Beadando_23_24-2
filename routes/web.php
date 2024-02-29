@@ -20,7 +20,9 @@ use App\Http\Controllers\PostController;
 Route::get('/', function () {
     return view('welcome');
 });
-
+            /*foreach ($user->categories as $category) {
+                $output["categories"]->push($category->name);
+            }*/
 
 Route::get('/hello1', function () {
     return 'Hello World';
@@ -29,6 +31,10 @@ Route::get('/hello1', function () {
 Route::get('/hello2', [HelloController::class, 'index']);
 
 Route::get('/listAll', [HelloController::class, 'listAll']);
+
+Route::get('/posts/full', [PostController::class, 'full']);
+
+Route::get('/users/categories', [UserController::class, 'categories']);
 
 //Route::get('/users', [UserController::class, 'index'])->name('users.index');
 //Route::get('/users/create', [UserController::class, 'create'])->name('users.create');

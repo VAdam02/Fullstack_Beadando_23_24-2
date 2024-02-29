@@ -98,4 +98,32 @@ class UserController extends Controller
 
         return redirect()->route('users.index');
     }
+
+    public function categories()
+    {
+        try {
+            //$users = User::all();
+            //$users = User::with('posts', 'posts.categories')->get();
+            $users = User::with('posts.categories')->get();
+
+            $output = array();
+
+            foreach ($users as $user) {
+                $array = array();
+                $array["name"] = $user->name;
+                $array["categories"] = collect();
+                foreach ($user->posts as $post) {
+                    foreach ($post->categories as $category) {
+                        $array["categories"]->push($category->name);
+                    }
+                }
+                $output[] = $array;
+            }
+
+            return json_encode($output);
+        }
+        catch (\Exception $e) {
+            return response($e->getMessage(), 500);
+        }
+    }
 }
