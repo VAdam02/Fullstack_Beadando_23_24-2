@@ -12,7 +12,8 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        return "List of all of the categories<br>" . Category::all()->toJson();
+        //return "List of all of the categories<br>" . Category::all()->toJson();
+        return view('category.categories', ["categories" => Category::orderBy('name', 'asc')->get()]);
     }
 
     /**
