@@ -1,5 +1,6 @@
 <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 
+<!-- List of Posts -->
 <div class="mt-5 mx-5 gap-4 flex flex-wrap">
     @foreach ($posts as $post)
     <div class="flex-auto w-96 rounded-lg p-4 bg-gray-100 shadow-md">
@@ -18,4 +19,9 @@
         </div>
     </div>
     @endforeach
+</div>
+
+<!-- Pagination Links -->
+<div class="mt-5">
+    {{ $posts->links() }}
 </div>
