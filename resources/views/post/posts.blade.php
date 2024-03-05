@@ -10,6 +10,7 @@
             {{ $post->content }}
         </div>
     </a>
+    <div class="text-sm text-gray-500 mt-2">Posted by <a href="{{ route('users.show', $post->author->id) }}" class="font-semibold text-gray-900">{{ $post->author->name }}</a> on {{ $post->date }}</div>
 </div>
 @endforeach
 </div>
