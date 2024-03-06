@@ -1,4 +1,4 @@
-<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+@vite('resources/css/app.css')
 
 <!-- Header -->
 <header class="bg-gray-800 text-white py-5 px-5">
