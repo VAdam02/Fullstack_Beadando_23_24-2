@@ -13,7 +13,8 @@ class PostController extends Controller
      */
     public function index()
     {
-        return view('post.posts', ['posts' => Post::orderBy('date', 'desc')->where('public', true)->with('author', 'categories')->paginate(12)]);
+        return view('post.posts', ['posts' => Post::orderBy('date', 'desc')->where('public', true)->with('author', 'categories')->paginate(12),
+                                   'highlightposts' => Post::orderBy('date', 'desc')->where('public', true)->with('author', 'categories')->take(5)->get()]);
     }
 
     /**
