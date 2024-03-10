@@ -58,16 +58,16 @@
 
 <div class="flex flex-wrap gap-10 p-5 my-3">
     <!-- Content -->
-    <div class="grow lg:w-96 w-full">
+    <div class="grow lg:w-96 w-full" style="min-width:62%">
         <h1 class="font-semibold mt-5 mb-3 text-3xl">Latest posts</h1>
         <!-- List of Posts -->
         <div class="my-3 gap-10 flex flex-wrap">
             @foreach ($posts as $post)
-            <div class="sm:w-96 w-full grow rounded-lg p-4 bg-gray-100 shadow-md hover:shadow-lg hover:scale-105 transform transition duration-300 ease-in-out">
+            <div class="sm:w-96 w-full grow rounded-lg p-4 bg-gray-200 shadow-md hover:shadow-lg hover:scale-105 transform transition duration-300 ease-in-out">
                 <a href="{{ route('posts.show', $post->id) }}" class="hover:text-gray-500">
                     <h2 class="truncate font-semibold text-lg mb-2">{{ $post->title }}</h2>
                     <div class="h-48 text-justify overflow-hidden relative">
-                        <div class="absolute bottom-0 left-0 w-full h-20 bg-gradient-to-t from-gray-100 to-transparent"></div>
+                        <div class="absolute bottom-0 left-0 w-full h-20 bg-gradient-to-t from-gray-200 to-transparent"></div>
                         {{ $post->content }}
                     </div>
                 </a>
@@ -87,26 +87,47 @@
         </div>
     </div>
 
-    <div class="w-fit">
-        <h1 class="font-semibold mt-5 mb-3 text-3xl">Top authors</h1>
-        <table class="bg-gray-900 rounded-lg overflow-hidden w-full">
-            <thead>
-                <tr>
-                    <th class="text-left px-4 py-2 border-b border-gray-700 text-white">Name</th>
-                    <th class="text-right px-4 py-2 border-b border-gray-700 text-white">Posts</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($authorsPostCount as $author)
-                <tr class="{{ $loop->iteration % 2 ? 'bg-gray-800' : 'bg-gray-700' }}">
-                    <td class="text-left px-4 py-2 border-b border-gray-700 text-white">{{ $author->name }}</td>
-                    <td class="text-right px-4 py-2 border-b border-gray-700 text-white">{{ $author->posts_count }}</td>
-                </tr>
-                @endforeach
-            </tbody>
-        </table>
-    </div>
+    <div class="flex flex-wrap gap-10 h-fit w-full xl:w-96">
+        <div class="mx-auto xl:mx-0 xl:w-full">
+            <h1 class="font-semibold mt-5 mb-3 text-3xl">Top authors</h1>
+            <table class="bg-gray-900 rounded-lg overflow-hidden w-full">
+                <thead>
+                    <tr>
+                        <th class="text-left px-4 py-2 border-b border-gray-700 text-white">Name</th>
+                        <th class="text-right px-4 py-2 border-b border-gray-700 text-white">Posts</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($authorsPostCount as $author)
+                    <tr class="{{ $loop->iteration % 2 ? 'bg-gray-800' : 'bg-gray-700' }}">
+                        <td class="text-left px-4 py-2 border-b border-gray-700 text-white">{{ $author->name }}</td>
+                        <td class="text-right px-4 py-2 border-b border-gray-700 text-white">{{ $author->posts_count }}</td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
 
+        <div class="mx-auto xl:mx-0 xl:w-full">
+            <h1 class="font-semibold mt-5 mb-3 text-3xl">Top categories</h1>
+            <table class="bg-gray-900 rounded-lg overflow-hidden w-full">
+                <thead>
+                    <tr>
+                        <th class="text-left px-4 py-2 border-b border-gray-700 text-white">Name</th>
+                        <th class="text-right px-4 py-2 border-b border-gray-700 text-white">Posts</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($categoriesPostCount as $category)
+                    <tr class="{{ $loop->iteration % 2 ? 'bg-gray-800' : 'bg-gray-700' }}">
+                        <td class="text-left px-4 py-2 border-b border-gray-700 text-white">{{ $category->name }}</td>
+                        <td class="text-right px-4 py-2 border-b border-gray-700 text-white">{{ $category->posts_count }}</td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>
 
 <!-- Footer -->
