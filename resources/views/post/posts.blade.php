@@ -1,4 +1,4 @@
-<x-general-layout>
+<x-general-layout title="Blog - Posts">
     <div class="w-full" data-carousel="slide">
         <!-- Carousel wrapper -->
         <div class="m-3 relative h-56 overflow-hidden rounded-lg">

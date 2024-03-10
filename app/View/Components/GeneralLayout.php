@@ -11,10 +11,12 @@ class GeneralLayout extends Component
     /**
      * Create a new component instance.
      */
-    public function __construct()
+    //update the constructor to accept the "title" variable and use it in the view
+    public function __construct(public string $title)
     {
-        //
+
     }
+
 
     /**
      * Get the view / contents that represent the component.

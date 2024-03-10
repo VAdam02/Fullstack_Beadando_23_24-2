@@ -12,7 +12,7 @@
     <!-- Header -->
     <header class="sticky top-0 z-40 bg-gray-800 text-white p-5">
         <div class="mx-auto">
-            <h1 class="text-3xl font-semibold">Blog - Posts</h1>
+            <h1 class="text-3xl font-semibold">{{ $title }}</h1>
         </div>
     </header>
 
