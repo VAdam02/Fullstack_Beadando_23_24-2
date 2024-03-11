@@ -25,7 +25,9 @@ class PostController extends Controller
      */
     public function create()
     {
-        return "Create form for a new post";
+        return view('posts.create', ['categories' => Category ::withCount(['posts' => function ($query) { $query->where('public', true); }])->orderBy('posts_count', 'desc')->get(),
+                                    'authorsPostCount' => User::withCount(['posts' => function ($query) { $query->where('public', true); }])->orderBy('posts_count', 'desc')->limit(8)->get(),
+                                    'categoriesPostCount' => Category ::withCount(['posts' => function ($query) { $query->where('public', true); }])->orderBy('posts_count', 'desc')->limit(8)->get()]);
     }
 
     /**
@@ -37,10 +39,11 @@ class PostController extends Controller
             'title' => 'required',
             'content' => 'required',
             'date' => 'nullable',
-            'public' => 'required',
+            'public' => 'nullable',
             'categories' => 'nullable|array'
         ]);
 
+        $validated['public'] = isset($validated['public']);
         if (!isset($validated["date"])) { $validated['date'] = now(); }
 
         $post = Post::make($validated);
