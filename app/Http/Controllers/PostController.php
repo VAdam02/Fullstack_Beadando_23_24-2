@@ -119,6 +119,8 @@ class PostController extends Controller
 
         if (isset($validated['categories'])) { $post->categories()->sync($validated['categories']); }
 
+        Session::flash('success', 'Post successfully updated!');
+
         return redirect()->route('posts.show', ['post' => $post->id . ""]);
     }
 
@@ -131,6 +133,8 @@ class PostController extends Controller
         if (!$post) { return response("Post $id not found", 404); }
 
         $post->delete();
+
+        Session::flash('success', 'Post successfully deleted!');
 
         return "Post $id deleted";
     }
