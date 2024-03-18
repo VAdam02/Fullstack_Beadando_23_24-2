@@ -79,7 +79,10 @@ class PostController extends Controller
     public function show(string $id)
     {
         $post = Post::find($id);
-        if (!$post) { return response("Post $id not found", 404); }
+        if (!$post) {
+            Session::flash('error', 'Post not found!');
+            return redirect()->route('posts.index');
+        }
 
         return view('posts.show', ['post' => $post,
                                    'authorsPostCount' => User::withCount(['posts' => function ($query) { $query->where('public', true); }])->orderBy('posts_count', 'desc')->limit(8)->get(),
@@ -92,7 +95,10 @@ class PostController extends Controller
     public function edit(string $id)
     {
         $post = Post::find($id);
-        if (!$post) { return response("Post $id not found", 404); }
+        if (!$post) {
+            Session::flash('error', 'Post not found!');
+            return redirect()->route('posts.index');
+        }
 
         return "Edit form for post with id: $id<br>" . $post->toJson();
     }
@@ -113,7 +119,10 @@ class PostController extends Controller
         if ($validated['date'] == null) { $validated['date'] = now(); }
 
         $post = Post::find($id);
-        if (!$post) { return response("Post $id not found", 404); }
+        if (!$post) {
+            Session::flash('error', 'Post not found!');
+            return redirect()->route('posts.index');
+        }
 
         $post->update($validated);
 
@@ -130,7 +139,10 @@ class PostController extends Controller
     public function destroy(string $id)
     {
         $post = Post::find($id);
-        if (!$post) { return response("Post $id not found", 404); }
+        if (!$post) {
+            Session::flash('error', 'Post not found!');
+            return redirect()->route('posts.index');
+        }
 
         $post->delete();
 
