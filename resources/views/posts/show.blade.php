@@ -11,6 +11,7 @@
     <p class="mb-3 text-justify">{{ $post->content }}</p>
     <p class="text-gray-500">Created at {{ $post->created_at->diffForHumans() }}</p>
     <p class="text-gray-500">Updated at {{ $post->updated_at->diffForHumans() }}</p>
+    <p class="text-gray-500">Published at {{ \Carbon\Carbon::parse($post->date)->diffForHumans() }}</p>
     <p class="text-gray-500 mb-3">Public: {{ $post->public ? 'Yes' : 'No' }}</p>
     <div class="flex gap-3">
         <a href="{{ route('posts.edit', $post) }}" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Edit</a>

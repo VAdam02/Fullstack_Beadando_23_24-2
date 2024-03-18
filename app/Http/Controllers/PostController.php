@@ -100,7 +100,10 @@ class PostController extends Controller
             return redirect()->route('posts.index');
         }
 
-        return "Edit form for post with id: $id<br>" . $post->toJson();
+        return view('posts.edit', ['post' => $post,
+                                   'categories' => Category ::withCount(['posts' => function ($query) { $query->where('public', true); }])->orderBy('posts_count', 'desc')->get(),
+                                   'authorsPostCount' => User::withCount(['posts' => function ($query) { $query->where('public', true); }])->orderBy('posts_count', 'desc')->limit(8)->get(),
+                                   'categoriesPostCount' => Category ::withCount(['posts' => function ($query) { $query->where('public', true); }])->orderBy('posts_count', 'desc')->limit(8)->get()]);
     }
 
     /**
@@ -109,7 +112,7 @@ class PostController extends Controller
     public function update(Request $request, string $id)
     {
         $validated = $request->validate([
-            'title' => 'required|max:255|min:3|unique:posts',
+            'title' => 'required|max:255|min:3|unique:posts,title,' . $id,
             'content' => 'required|max:10000|min:3',
             'date' => 'nullable|date',
             'public' => 'nullable',
