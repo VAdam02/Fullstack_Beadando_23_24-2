@@ -78,7 +78,9 @@ class PostController extends Controller
         $post = Post::find($id);
         if (!$post) { return response("Post $id not found", 404); }
 
-        return "Show post with id: $id<br>" . $post->toJson();
+        return view('posts.show', ['post' => $post,
+                                   'authorsPostCount' => User::withCount(['posts' => function ($query) { $query->where('public', true); }])->orderBy('posts_count', 'desc')->limit(8)->get(),
+                                   'categoriesPostCount' => Category ::withCount(['posts' => function ($query) { $query->where('public', true); }])->orderBy('posts_count', 'desc')->limit(8)->get()]);
     }
 
     /**
