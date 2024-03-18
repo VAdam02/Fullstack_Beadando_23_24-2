@@ -10,11 +10,18 @@
 </head>
 <body>
     <!-- Header -->
-    <header class="sticky top-0 z-40 bg-gray-800 text-white p-5">
-        <div class="mx-auto">
+    <header class="sticky top-0 z-40">
+        <div class="bg-gray-800 text-white p-5 mx-auto">
             <h1 class="text-3xl font-semibold">{{ $title }}</h1>
         </div>
+        @if (session('success'))
+        <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4" role="alert">
+            <p class="font-bold">Success</p>
+            <p>{{ session('success') }}</p>
+        </div>
+        @endif
     </header>
+
 
     {{ $slot }}
 

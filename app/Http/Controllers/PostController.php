@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 use App\Models\Post;
 use App\Models\User;
 use App\Models\Category;
@@ -66,6 +67,8 @@ class PostController extends Controller
         $post->save();
 
         if (isset($validated['categories'])) { $post->categories()->sync($validated['categories']); }
+
+        Session::flash('success', 'Post successfully created!');
 
         return redirect()->route('posts.show', ['post' => $post->id . ""]);
     }
