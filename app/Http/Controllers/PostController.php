@@ -36,11 +36,23 @@ class PostController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'title' => 'required',
-            'content' => 'required',
-            'date' => 'nullable',
+            'title' => 'required|max:255|min:3|unique:posts',
+            'content' => 'required|max:10000|min:3',
+            'date' => 'nullable|date',
             'public' => 'nullable',
-            'categories' => 'nullable|array'
+            'categories' => 'nullable|array|exists:categories,id'
+        ],
+        [
+            'title.required' => 'A cím megadása kötelező!',
+            'title.max' => 'A cím maximum 255 karakter hosszú lehet!',
+            'title.min' => 'A cím minimum 3 karakter hosszú kell legyen!',
+            'title.unique' => "A címnek egyedinek kell lennie!",
+            'content.required' => 'A tartalom megadása kötelező!',
+            'content.max' => 'A tartalom maximum 10000 karakter hosszú lehet!',
+            'content.min' => 'A tartalom minimum 3 karakter hosszú kell legyen!',
+            'date.date' => 'A dátum formátuma nem megfelelő!',
+            'categories.array' => 'A kategóriák formátuma nem megfelelő!',
+            'categories.exists' => 'A kategóriák közül legalább egy nem létezik!'
         ]);
 
         $validated['public'] = isset($validated['public']);
