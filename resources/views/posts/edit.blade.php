@@ -14,6 +14,17 @@
         <div class="mb-3">
             <label for="content" class="block text-sm font-semibold mb-2">Content</label>
             <textarea name="content" id="content" class="w-full p-2 border border-gray-300 rounded">{{ old('content', $post->content) }}</textarea>
+            <script>
+                content.addEventListener('input', function (e) {
+                    content.style.height = (content.scrollHeight) + 'px';
+                });
+                addEventListener('load', function (e) {
+                    content.style.height = (content.scrollHeight) + 'px';
+                });
+                addEventListener('resize', function (e) {
+                    content.style.height = (content.scrollHeight) + 'px';
+                });
+            </script>
             @error('content')
             <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
             @enderror
@@ -48,8 +59,14 @@
             <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
             @enderror
         </div>
-        <div class="mb-3">
-            <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Update post</button>
+        <div class="flex gap-3">
+            <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">Save</button>
+            <a href="{{ url()->previous() }}" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Cancel</a>
+            <form action="{{ route('posts.destroy', $post) }}" method="POST" class="inline-block">
+                @csrf
+                @method('DELETE')
+                <button type="submit" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">Delete</button>
+            </form>
         </div>
     </form>
 </x-posts-layout>
