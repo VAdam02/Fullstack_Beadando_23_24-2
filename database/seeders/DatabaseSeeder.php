@@ -47,6 +47,7 @@ class DatabaseSeeder extends Seeder
         for ($i = 0; $i < $userCount; $i++) {
             $users->push(User::factory()->create([
                 'email' => 'email' . $i . '@szerveroldali.hu',
+                'password' => 'password' . $i,
             ]));
         }
 
