@@ -46,7 +46,10 @@ Route::get('/users/categories', [UserController::class, 'categories']);
 
 Route::resource('users', UserController::class);
 Route::resource('categories', CategoryController::class);
-Route::resource('posts', PostController::class);
+//Route::resource('posts', PostController::class);
+//protect each post path with auth except for index and show
+Route::resource('posts', PostController::class)->except(['index', 'show'])->middleware('auth');
+Route::resource('posts', PostController::class)->only(['index', 'show']);
 
 Auth::routes();
 
