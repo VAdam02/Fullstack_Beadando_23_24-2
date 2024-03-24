@@ -47,3 +47,7 @@ Route::get('/users/categories', [UserController::class, 'categories']);
 Route::resource('users', UserController::class);
 Route::resource('categories', CategoryController::class);
 Route::resource('posts', PostController::class);
+
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
