@@ -12,7 +12,20 @@
     <!-- Header -->
     <header class="sticky top-0 z-40">
         <div class="bg-gray-800 text-white p-5 mx-auto">
-            <h1 class="text-3xl font-semibold">{{ $title }}</h1>
+            <div class="flex justify-between items-center">
+                <div class="w-1/3 text-start">
+                    <a class="text-2xl mx-2" href="{{ route('posts.index') }}">Posts</a>
+                    <a class="text-2xl mx-2" href="{{ route('users.index') }}">Users</a>
+                    <a class="text-2xl mx-2" href="{{ route('categories.index') }}">Categories</a>
+                </div>
+                <div class="w-1/3 text-center">
+                    <a class="text-3xl font-semibold">{{ $title }}</a>
+                </div>
+                <div class="w-1/3 text-end">
+                    <a href="{{ route('login') }}" class="text-white">Login</a>
+                    <a href="{{ route('register') }}" class="text-white">Register</a>
+                </div>
+            </div>
         </div>
         @if (session('success'))
         <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4" role="alert">
