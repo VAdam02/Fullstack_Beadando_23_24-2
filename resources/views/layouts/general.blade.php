@@ -22,8 +22,17 @@
                     <a class="text-3xl font-semibold">{{ $title }}</a>
                 </div>
                 <div class="w-1/3 text-end">
+                    @auth
+                    <span>{{ auth()->user()->name }}</span>
+                    <form action="{{ route('logout') }}" method="post" class="inline">
+                        @csrf
+                        <button type="submit">Logout</button>
+                    </form>
+                    @endauth
+                    @guest
                     <a href="{{ route('login') }}" class="text-white">Login</a>
                     <a href="{{ route('register') }}" class="text-white">Register</a>
+                    @endguest
                 </div>
             </div>
         </div>
