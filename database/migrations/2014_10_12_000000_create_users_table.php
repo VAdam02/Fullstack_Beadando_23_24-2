@@ -19,6 +19,7 @@ return new class extends Migration
             $table->integer('age');
             $table->string('phone')->nullable();
             $table->string('password');
+            $table->boolean('isadmin')->default(false);
             $table->rememberToken();
             $table->timestamps();
         });

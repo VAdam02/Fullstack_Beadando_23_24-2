@@ -30,6 +30,7 @@ class UserFactory extends Factory
             'age' => fake()->numberBetween(18, 100),
             'phone' => fake()->optional(0.3)->phoneNumber(),
             'password' => static::$password ??= Hash::make('password'),
+            'isadmin' => fake()->boolean(10),
             'remember_token' => Str::random(10),
         ];
     }

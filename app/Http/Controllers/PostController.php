@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Session;
 use App\Models\Post;
 use App\Models\User;
 use App\Models\Category;
+use Illuminate\Support\Facades\Gate;
 
 class PostController extends Controller
 {
@@ -161,6 +162,12 @@ class PostController extends Controller
     public function destroy(string $id)
     {
         $post = Post::find($id);
+
+        if (Gate::denies('delete-post', $post)) {
+            Session::flash('error', 'You are not authorized to delete this post!');
+            return redirect()->route('posts.show', ['post' => $post->id . ""]);
+        }
+
         if (!$post) {
             Session::flash('error', 'Post not found!');
             return redirect()->route('posts.index');
