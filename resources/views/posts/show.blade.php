@@ -14,11 +14,15 @@
     <p class="text-gray-500">Published at {{ \Carbon\Carbon::parse($post->date)->diffForHumans() }}</p>
     <p class="text-gray-500 mb-3">Public: {{ $post->public ? 'Yes' : 'No' }}</p>
     <div class="flex gap-3">
+        @can('update', $post)
         <a href="{{ route('posts.edit', $post) }}" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Edit</a>
+        @endcan
+        @can('delete', $post)
         <form action="{{ route('posts.destroy', $post) }}" method="POST" class="inline-block">
             @csrf
             @method('DELETE')
             <button type="submit" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">Delete</button>
         </form>
+        @endcan
     </div>
 </x-posts-layout>

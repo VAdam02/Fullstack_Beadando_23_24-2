@@ -62,11 +62,13 @@
         <div class="flex gap-3">
             <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">Save</button>
             <a href="{{ url()->previous() }}" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Cancel</a>
+            @can('delete', $post)
             <form action="{{ route('posts.destroy', $post) }}" method="POST" class="inline-block">
                 @csrf
                 @method('DELETE')
                 <button type="submit" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">Delete</button>
             </form>
+            @endcan
         </div>
     </form>
 </x-posts-layout>

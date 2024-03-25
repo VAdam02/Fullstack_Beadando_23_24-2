@@ -50,6 +50,11 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
+        if (Auth::user()->cannot('create', Post::class)) {
+            Session::flash('error', 'You are not authorized to create a post!');
+            return redirect()->route('posts.index');
+        }
+
         $validated = $request->validate([
             'title' => 'required|max:255|min:3|unique:posts',
             'content' => 'required|max:10000|min:3',
@@ -75,8 +80,7 @@ class PostController extends Controller
 
         $post = Post::make($validated);
 
-        //TODO set to the logged in user
-        $post->author()->associate(User::find(1));
+        $post->author()->associate(Auth::user());
 
         $post->save();
 
@@ -93,6 +97,12 @@ class PostController extends Controller
     public function show(string $id)
     {
         $post = Post::find($id);
+
+        if (Auth::user()->cannot('view', $post)) {
+            Session::flash('error', 'You are not authorized to view this post!');
+            return redirect()->route('posts.index');
+        }
+
         if (!$post) {
             Session::flash('error', 'Post not found!');
             return redirect()->route('posts.index');
@@ -109,6 +119,12 @@ class PostController extends Controller
     public function edit(string $id)
     {
         $post = Post::find($id);
+
+        if (Auth::user()->cannot('update', $post)) {
+            Session::flash('error', 'You are not authorized to edit this post!');
+            return redirect()->route('posts.index');
+        }
+
         if (!$post) {
             Session::flash('error', 'Post not found!');
             return redirect()->route('posts.index');
@@ -125,6 +141,13 @@ class PostController extends Controller
      */
     public function update(Request $request, string $id)
     {
+        $post = Post::find($id);
+
+        if (Auth::user()->cannot('update', $post)) {
+            Session::flash('error', 'You are not authorized to edit this post!');
+            return redirect()->route('posts.index');
+        }
+
         $validated = $request->validate([
             'title' => 'required|max:255|min:3|unique:posts,title,' . $id,
             'content' => 'required|max:10000|min:3',
@@ -147,7 +170,6 @@ class PostController extends Controller
 
         if ($validated['date'] == null) { $validated['date'] = now(); }
 
-        $post = Post::find($id);
         if (!$post) {
             Session::flash('error', 'Post not found!');
             return redirect()->route('posts.index');
@@ -169,7 +191,13 @@ class PostController extends Controller
     {
         $post = Post::find($id);
 
+        /*
         if (Gate::denies('delete-post', $post)) {
+            Session::flash('error', 'You are not authorized to delete this post!');
+            return redirect()->route('posts.show', ['post' => $post->id . ""]);
+        }
+        */
+        if (Auth::user()->cannot('delete', $post)) {
             Session::flash('error', 'You are not authorized to delete this post!');
             return redirect()->route('posts.show', ['post' => $post->id . ""]);
         }
