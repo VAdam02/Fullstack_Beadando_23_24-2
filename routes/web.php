@@ -48,7 +48,7 @@ Route::resource('users', UserController::class);
 Route::resource('categories', CategoryController::class);
 //Route::resource('posts', PostController::class);
 Route::resource('posts', PostController::class)->except(['index', 'show'])->middleware('auth');
-Route::resource('posts', PostController::class)->only(['index', 'show']);
+Route::resource('posts', PostController::class)->only(['index', 'show'])->middleware('can:viewAny,App\Models\Post');
 
 Auth::routes();
 
