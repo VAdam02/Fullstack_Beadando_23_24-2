@@ -85,7 +85,7 @@ class PostController extends Controller
             $file = $request -> file('image');
             $fname = $file -> hashName();
             Storage::disk('public') -> put('images/' . $fname, $file -> get());
-            $validated['filename'] = $fname;
+            $validated['imagename'] = $fname;
         }
 
         $post = Post::make($validated);
