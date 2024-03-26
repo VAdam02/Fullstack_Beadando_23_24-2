@@ -163,7 +163,8 @@ class PostController extends Controller
             'content' => 'required|max:10000|min:3',
             'date' => 'nullable|date',
             'public' => 'nullable',
-            'categories' => 'nullable|array|exists:categories,id'
+            'categories' => 'nullable|array|exists:categories,id',
+            'image' => 'nullable|image'
         ],
         [
             'title.required' => 'A cím megadása kötelező!',
@@ -175,7 +176,8 @@ class PostController extends Controller
             'content.min' => 'A tartalom minimum 3 karakter hosszú kell legyen!',
             'date.date' => 'A dátum formátuma nem megfelelő!',
             'categories.array' => 'A kategóriák formátuma nem megfelelő!',
-            'categories.exists' => 'A kategóriák közül legalább egy nem létezik!'
+            'categories.exists' => 'A kategóriák közül legalább egy nem létezik!',
+            'image.image' => 'A kép formátuma nem megfelelő!'
         ]);
 
         if ($validated['date'] == null) { $validated['date'] = now(); }
@@ -183,6 +185,21 @@ class PostController extends Controller
         if (!$post) {
             Session::flash('error', 'Post not found!');
             return redirect()->route('posts.index');
+        }
+
+        if ($post->imagename != null && $request -> hasFile('image')) {
+            Storage::disk('public')->delete('images/' . $post->imagename);
+        }
+
+        if ($request -> hasFile('image')){
+            $file = $request -> file('image');
+            $fname = $file -> hashName();
+            Storage::disk('public') -> put('images/' . $fname, $file -> get());
+            $validated['imagename'] = $fname;
+        }
+        else
+        {
+            $validated['imagename'] = $post->imagename;
         }
 
         $post->update($validated);
@@ -215,6 +232,10 @@ class PostController extends Controller
         if (!$post) {
             Session::flash('error', 'Post not found!');
             return redirect()->route('posts.index');
+        }
+
+        if ($post->imagename) {
+            Storage::disk('public')->delete('images/' . $post->imagename);
         }
 
         $post->delete();
