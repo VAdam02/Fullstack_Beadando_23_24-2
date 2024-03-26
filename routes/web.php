@@ -18,8 +18,8 @@ use App\Http\Controllers\PostController;
 */
 
 Route::get('/', function () {
-    return view('welcome');
-});
+    return redirect()->route('posts.index');
+})->name('home');
             /*foreach ($user->categories as $category) {
                 $output["categories"]->push($category->name);
             }*/
@@ -52,4 +52,6 @@ Route::resource('posts', PostController::class)->only(['index']);
 
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/home', function () {
+    return redirect()->route('home');
+});
