@@ -1,7 +1,11 @@
 <x-posts-layout title="Post editor" :authorsPostCount="$authorsPostCount" :categoriesPostCount="$categoriesPostCount">
     @vite(['resources/css/app.css','resources/js/app.js'])
 
-    <form action="{{ route('posts.update', $post) }}" method="POST">
+    <div class="h-96">
+        @include('posts.partials.banner', ['post' => $post])
+    </div>
+
+    <form action="{{ route('posts.update', $post) }}" method="POST" enctype="multipart/form-data">
         @csrf
         @method('PUT')
         <div class="mb-3">
@@ -74,14 +78,14 @@
         </div>
         <div class="flex gap-3">
             <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">Save</button>
-            <a href="{{ url()->previous() }}" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Cancel</a>
-            @can('delete', $post)
-            <form action="{{ route('posts.destroy', $post) }}" method="POST" class="inline-block">
-                @csrf
-                @method('DELETE')
-                <button type="submit" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">Delete</button>
-            </form>
-            @endcan
         </div>
     </form>
+    <a href="{{ url()->previous() }}" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Cancel</a>
+    @can('delete', $post)
+    <form action="{{ route('posts.destroy', $post) }}" method="POST" class="inline-block">
+        @csrf
+        @method('DELETE')
+        <button type="submit" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">Delete</button>
+    </form>
+    @endcan
 </x-posts-layout>

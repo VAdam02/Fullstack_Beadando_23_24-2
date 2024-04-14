@@ -1,26 +1,12 @@
 <div class="w-full" data-carousel="slide">
     <!-- Carousel wrapper -->
-    <div class="m-3 relative h-56 overflow-hidden rounded-lg">
+    <div class="m-3 relative h-96 overflow-hidden rounded-lg">
         @foreach ($highlightposts as $post)
         <div class="hidden duration-700 ease-in-out" data-carousel-item>
-            <div class="rounded-lg p-5 bg-gray-700 shadow-md">
-                <a href="{{ route('posts.show', $post->id) }}" class="text-gray-300 hover:text-gray-500 transition duration-500 ease-in-out">
-                    <h2 class="truncate font-semibold text-lg mb-2">{{ $post->title }}</h2>
-                    <div class="h-24 text-justify overflow-hidden relative">
-                        <div class="absolute text-justify bottom-0 left-0 w-full h-10 bg-gradient-to-t from-gray-700 to-transparent"></div>
-                        {{ $post->content }}
-                    </div>
-                </a>
-                <div class="text-sm text-gray-100 mt-2">Posted by <a href="{{ route('users.show', $post->author->id) }}" class="font-semibold text-gray-400 hover:text-gray-800 transition duration-200 ease-in-out">{{ $post->author->name }}</a> on {{ $post->date }}</div>
-                <div class="mt-2">
-                    @foreach ($post->categories as $category)
-                        <a href="{{ route('categories.show', $category->id) }}" class="inline-block px-2 py-1 rounded-full text-xs font-semibold text-gray-900 mt-1 mr-2 hover:text-gray-500 transition duration-200 ease-in-out" style="background-color: {{ $category->color }}">{{ $category->name }}</a>
-                    @endforeach
-                </div>
-            </div>
+            @include('posts.partials.banner', ['post' => $post])
         </div>
-
         @endforeach
+
         <!-- Slider indicators -->
         <div class="absolute z-30 flex -translate-x-1/2 bottom-5 left-1/2 space-x-3 rtl:space-x-reverse">
             @foreach ($highlightposts as $post)
