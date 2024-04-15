@@ -1,6 +1,8 @@
 <x-posts-layout title="Post viewer" :authorsPostCount="$authorsPostCount" :categoriesPostCount="$categoriesPostCount">
     @vite(['resources/css/app.css','resources/js/app.js'])
 
+    <img src="{{ is_null($post->imagename) ? "https://via.placeholder.com/640x480.png/004466" : Storage::url('images/' . $post->imagename) }}" alt="{{ $post->title }}" class="w-full h-96 object-cover object-center rounded-lg mb-5">
+
     <h1 class="font-semibold mt-5 text-3xl">{{ $post->title }}</h1>
     <p class="text-gray-500 mb-1 text-sm">By {{ $post->author->name }}</p>
     <div class="my-2">
