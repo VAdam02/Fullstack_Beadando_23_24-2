@@ -27,4 +27,7 @@
         </form>
         @endcan
     </div>
+    <div class="mt-5">
+        @include('users.partials.card', ['user' => $post->author])
+    </div>
 </x-posts-layout>
