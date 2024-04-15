@@ -1,6 +1,6 @@
 @vite(['resources/css/app.css','resources/js/app.js'])
 
-<div class="relative w-full h-full duration-700 ease-in-out rounded-lg p-5 shadow-md" style="background-image: url('{{ is_null($post->imagename) ? "https://via.placeholder.com/640x480.png/004466" : Storage::url('images/' . $post->imagename) }}'); background-size: cover; background-position: center;">
+<div id="banner" class="relative w-full h-full duration-700 ease-in-out rounded-lg p-5 shadow-md" style="background-image: url('{{ is_null($post->imagename) ? "https://via.placeholder.com/640x480.png/004466" : Storage::url('images/' . $post->imagename) }}'); background-size: cover; background-position: center;">
     <a href="{{ route('posts.show', $post->id) }}">
         <div class="absolute bottom-0 right-0 bg-gray-900 text-white w-96 max-w-full p-3 rounded-tl-lg rounded-br-lg">
             <h2 class="truncate font-semibold text-lg mb-2">{{ $post->title }}</h2>

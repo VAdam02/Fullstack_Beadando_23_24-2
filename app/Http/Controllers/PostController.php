@@ -257,4 +257,14 @@ class PostController extends Controller
 
         return $posts->toJson();
     }
+
+    public function bannerPreview(Request $request)
+    {
+        $post = Post::make($request->all());
+        $post->id = 0;
+        $post->author_id = Auth::id();
+        $post->categories = Category::find($request->categories);
+
+        return view('posts.partials.banner', ['post' => $post]);
+    }
 }

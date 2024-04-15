@@ -1,11 +1,11 @@
 <x-posts-layout title="Post editor" :authorsPostCount="$authorsPostCount" :categoriesPostCount="$categoriesPostCount">
     @vite(['resources/css/app.css','resources/js/app.js'])
 
-    <div class="h-96">
-        @include('posts.partials.banner', ['post' => $post])
+    <div class="h-96" id="preview">
+
     </div>
 
-    <form action="{{ route('posts.update', $post) }}" method="POST" enctype="multipart/form-data">
+    <form id="editform" action="{{ route('posts.update', $post) }}" method="POST" enctype="multipart/form-data">
         @csrf
         @method('PUT')
         <div class="mb-3">
@@ -56,12 +56,6 @@
             <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
             @enderror
         </div>
-        @if($post->imagename != null)
-        <div class="relative w-full h-48 mb-4">
-            <img src="{{ Storage::url('images/' . $post->imagename) }}" alt="{{ $post->title }}" class="w-full h-full object-cover rounded-lg">
-            <div class="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-transparent to-gray-900 opacity-50 rounded-lg"></div>
-        </div>
-        @endif
         <div class="mb-3">
             <label for="image" class="block text-sm font-semibold mb-2">Image</label>
             <input type="file" name="image" id="image" class="w-full p-2 border border-gray-300 rounded">
@@ -79,6 +73,42 @@
         <div class="flex gap-3">
             <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">Save</button>
         </div>
+
+        <script>
+            function updatePreview() {
+                console.log("jej")
+                let title = document.getElementById('title').value;
+                let content = document.getElementById('content').value;
+                let date = document.getElementById('date').value;
+                let public = document.getElementById('public').checked;
+                let categories = Array.from(document.querySelectorAll('input[name="categories[]"]:checked')).map(category => category.value);
+                let image = document.getElementById('image').files[0];
+
+                fetch('/posts/preview', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        title: title,
+                        content: content,
+                        date: date,
+                        public: public,
+                        categories: categories
+                    })
+                })
+                .then(function (response) {
+                    return response.text();
+                })
+                .then(function (html) {
+                    document.getElementById('preview').innerHTML = html;
+                    document.querySelector('#preview #banner').style.backgroundImage = image == null ? 'url("{{ Storage::url('images/' . $post->imagename) }}")' : `url(${URL.createObjectURL(image)})`;
+                });
+            }
+            document.querySelector('#editform').addEventListener('input', updatePreview);
+
+            updatePreview();
+        </script>
     </form>
     <a href="{{ url()->previous() }}" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Cancel</a>
     @can('delete', $post)

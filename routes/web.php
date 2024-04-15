@@ -47,6 +47,7 @@ Route::get('/users/categories', [UserController::class, 'categories']);
 Route::resource('users', UserController::class);
 Route::resource('categories', CategoryController::class);
 //Route::resource('posts', PostController::class);
+Route::post('/posts/preview', [PostController::class, 'bannerPreview'])->name('posts.preview');
 Route::resource('posts', PostController::class)->except(['index'])->middleware('auth');
 Route::resource('posts', PostController::class)->only(['index']);
 
