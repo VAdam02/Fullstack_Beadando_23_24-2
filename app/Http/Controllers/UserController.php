@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\Category;
 
 class UserController extends Controller
 {
@@ -12,7 +13,9 @@ class UserController extends Controller
      */
     public function index()
     {
-        return "List of all of the users<br>" . User::all()->toJson();
+        return view('users.index', ['users' => User::paginate(12),
+            'authorsPostCount' => User::withCount(['posts' => function ($query) { $query->where('public', true); }])->orderBy('posts_count', 'desc')->limit(8)->get(),
+            'categoriesPostCount' => Category::withCount(['posts' => function ($query) { $query->where('public', true); }])->orderBy('posts_count', 'desc')->limit(8)->get()]);
     }
 
     /**
