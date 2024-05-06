@@ -44,4 +44,4 @@ jobs:
         password: dckr_pat_ZNmmH5JHxf6jjyxGU9M0Py59jLE
 
     - name: Push to Docker Hub
-      run: docker push laravel-app
+      run: docker push docker.io/library/laravel-app
