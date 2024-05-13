@@ -16,7 +16,6 @@
                 <div class="w-1/3 text-start">
                     <a class="text-2xl mx-2" href="{{ route('posts.index') }}">Posts</a>
                     <a class="text-2xl mx-2" href="{{ route('users.index') }}">Users</a>
-                    <a class="text-2xl mx-2" href="{{ route('categories.index') }}">Categories</a>
                     @can('create', App\Models\Post::class)
                     <a class="text-2xl mx-2" href="{{ route('posts.create') }}">Create post</a>
                     @endcan

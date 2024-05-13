@@ -52,7 +52,15 @@ class UserController extends Controller
         $user = User::find($id);
         if (!$user) { return response("User $id not found", 404); }
 
-        return "Show user with id: $id<br>" . $user->toJson();
+        //list users posts
+        //'posts' => Post::orderBy('date', 'desc')->where('public', true)->with('author', 'categories')->paginate(12),
+
+        $posts = $user->posts()->orderBy('date', 'desc')->where('public', true)->with('author', 'categories')->paginate(12);
+
+        return view('users.show', ['user' => $user,
+            'posts' => $posts,
+            'authorsPostCount' => User::withCount(['posts' => function ($query) { $query->where('public', true); }])->orderBy('posts_count', 'desc')->limit(8)->get(),
+            'categoriesPostCount' => Category::withCount(['posts' => function ($query) { $query->where('public', true); }])->orderBy('posts_count', 'desc')->limit(8)->get()]);
     }
 
     /**
