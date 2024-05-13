@@ -1,5 +1,5 @@
 # Use the official PHP image as a base
-FROM php:8.1-fpm
+FROM php:8.1-fqm
 
 # Set working directory
 WORKDIR /var/www/html
@@ -17,6 +17,8 @@ RUN apt-get update && apt-get install -y \
     && pecl install xdebug \
     && docker-php-ext-enable xdebug
 
+RUN apt-get install -y nodejs npm
+
 # Copy composer.lock and composer.json
 COPY composer.lock composer.json ./
 
@@ -27,11 +29,13 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 # Copy existing application directory contents
 COPY . .
 
-# Generate autoload files
-RUN composer dump-autoload --optimize
+RUN composer update
+RUN composer install
+RUN npm install
+RUN php artisan key:generate
 
 RUN npm run build
 
-# Expose port 9000 and start php-fpm server
+# Expose port 8000 and start php-fpm server
 EXPOSE 8000
 CMD ["php artisan serve"]
