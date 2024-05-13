@@ -38,4 +38,4 @@ RUN npm run build
 
 # Expose port 8000 and start php-fpm server
 EXPOSE 8000
-CMD ["php artisan serve"]
+CMD ["php-fpm"]
