@@ -30,6 +30,8 @@ COPY . .
 # Generate autoload files
 RUN composer dump-autoload --optimize
 
+RUN npm run production
+
 # Expose port 9000 and start php-fpm server
-EXPOSE 9000
-CMD ["php-fpm"]
+EXPOSE 8000
+CMD ["php artisan serve"]
