@@ -1,7 +1,9 @@
 <x-posts-layout title="Post editor" :authorsPostCount="$authorsPostCount" :categoriesPostCount="$categoriesPostCount">
     @vite(['resources/css/app.css','resources/js/app.js'])
 
-    <form action="{{ route('posts.store') }}" method="POST" enctype="multipart/form-data">
+    <div class="h-96" id="preview"></div>
+
+    <form id="createform" action="{{ route('posts.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
         <div class="mb-3">
             <label for="title" class="block text-sm font-semibold mb-2">Title</label>
@@ -13,6 +15,17 @@
         <div class="mb-3">
             <label for="content" class="block text-sm font-semibold mb-2">Content</label>
             <textarea name="content" id="content" class="w-full p-2 border border-gray-300 rounded">{{ old('content') }}</textarea>
+            <script>
+                content.addEventListener('input', function (e) {
+                    content.style.height = (content.scrollHeight) + 'px';
+                });
+                addEventListener('load', function (e) {
+                    content.style.height = (content.scrollHeight) + 'px';
+                });
+                addEventListener('resize', function (e) {
+                    content.style.height = (content.scrollHeight) + 'px';
+                });
+            </script>
             @error('content')
             <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
             @enderror
@@ -49,5 +62,37 @@
         <div class="mb-3">
             <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Create post</button>
         </div>
+        <script>
+            function updatePreview() {
+                let title = document.getElementById('title').value;
+                let content = document.getElementById('content').value;
+                let public = document.getElementById('public').checked;
+                let categories = Array.from(document.querySelectorAll('input[name="categories[]"]:checked')).map(category => category.value);
+                let image = document.getElementById('image').files[0];
+
+                fetch('/posts/preview', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        title: title,
+                        content: content,
+                        public: public,
+                        categories: categories
+                    })
+                })
+                .then(function (response) {
+                    return response.text();
+                })
+                .then(function (html) {
+                    document.getElementById('preview').innerHTML = html;
+                    document.querySelector('#preview #banner').style.backgroundImage = image == null ? 'url("https://via.placeholder.com/640x480.png/004466")' : `url(${URL.createObjectURL(image)})`;
+                });
+            }
+            document.querySelector('#createform').addEventListener('input', updatePreview);
+
+            updatePreview();
+        </script>
     </form>
 </x-posts-layout>

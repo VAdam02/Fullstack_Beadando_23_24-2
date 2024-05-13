@@ -1,9 +1,7 @@
 <x-posts-layout title="Post editor" :authorsPostCount="$authorsPostCount" :categoriesPostCount="$categoriesPostCount">
     @vite(['resources/css/app.css','resources/js/app.js'])
 
-    <div class="h-96" id="preview">
-
-    </div>
+    <div class="h-96" id="preview"></div>
 
     <form id="editform" action="{{ route('posts.update', $post) }}" method="POST" enctype="multipart/form-data">
         @csrf
@@ -76,7 +74,6 @@
 
         <script>
             function updatePreview() {
-                console.log("jej")
                 let title = document.getElementById('title').value;
                 let content = document.getElementById('content').value;
                 let date = document.getElementById('date').value;
@@ -102,7 +99,7 @@
                 })
                 .then(function (html) {
                     document.getElementById('preview').innerHTML = html;
-                    document.querySelector('#preview #banner').style.backgroundImage = image == null ? 'url("{{ Storage::url('images/' . $post->imagename) }}")' : `url(${URL.createObjectURL(image)})`;
+                    document.querySelector('#preview #banner').style.backgroundImage = image == null ? 'url("{{ $post->imagename == null ? "https://via.placeholder.com/640x480.png/004466" : Storage::url('images/' . $post->imagename) }}")' : `url(${URL.createObjectURL(image)})`;
                 });
             }
             document.querySelector('#editform').addEventListener('input', updatePreview);
