@@ -30,7 +30,7 @@ COPY . .
 # Generate autoload files
 RUN composer dump-autoload --optimize
 
-RUN npm run production
+RUN npm run build
 
 # Expose port 9000 and start php-fpm server
 EXPOSE 8000
