@@ -52,9 +52,6 @@ class UserController extends Controller
         $user = User::find($id);
         if (!$user) { return response("User $id not found", 404); }
 
-        //list users posts
-        //'posts' => Post::orderBy('date', 'desc')->where('public', true)->with('author', 'categories')->paginate(12),
-
         $posts = $user->posts()->orderBy('date', 'desc')->where('public', true)->with('author', 'categories')->paginate(12);
 
         return view('users.show', ['user' => $user,

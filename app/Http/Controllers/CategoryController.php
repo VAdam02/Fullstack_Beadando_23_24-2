@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Category;
+use App\Models\User;
 
 class CategoryController extends Controller
 {
@@ -48,7 +49,12 @@ class CategoryController extends Controller
 
         if (!$category) { return response("Category $id not found", 404); }
 
-        return "Show category with id: $id<br>" . $category->toJson();
+        $posts = $category->posts()->orderBy('date', 'desc')->where('public', true)->with('author', 'categories')->paginate(12);
+
+        return view('category.show', ['category' => $category,
+            'posts' => $posts,
+            'authorsPostCount' => User::withCount(['posts' => function ($query) { $query->where('public', true); }])->orderBy('posts_count', 'desc')->limit(8)->get(),
+            'categoriesPostCount' => Category::withCount(['posts' => function ($query) { $query->where('public', true); }])->orderBy('posts_count', 'desc')->limit(8)->get()]);
     }
 
     /**
