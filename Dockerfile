@@ -39,15 +39,15 @@ RUN npm run build
 RUN php artisan key:generate
 
 #Storage
-RUN chown -R root:root /var/www/html/storage
-RUN chmod -R 700 /var/www/html/storage
 RUN php artisan storage:link
 
 #Database
 RUN touch /var/www/html/database/database.sqlite
 RUN chown root:root /var/www/html/database/database.sqlite
-RUN chmod 700 /var/www/html/database/database.sqlite
 RUN php artisan migrate:fresh --seed
+
+RUN chmod -R 777 /var/www/html/
+RUN chown -R www-data:www-data /var/www/html/
 
 EXPOSE 80
 
