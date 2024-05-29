@@ -1,11 +1,12 @@
 # Use the official PHP image as a base
-FROM php:8.1-fpm
+FROM php:8.2-fpm
 
 # Set working directory
 WORKDIR /var/www/html
 
 # Install dependencies
 RUN apt-get update && apt-get install -y \
+    nginx \
     git \
     unzip \
     libpng-dev \
@@ -19,23 +20,33 @@ RUN apt-get update && apt-get install -y \
 
 RUN apt-get install -y nodejs npm
 
-# Copy composer.lock and composer.json
-COPY composer.lock composer.json ./
-
 # Install Composer dependencies
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer \
-    && composer install --no-autoloader --no-scripts
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 # Copy existing application directory contents
 COPY . .
 
+COPY ./nginx/nginx.conf /etc/nginx/sites-available/default
+
+COPY .env.example .env
+
 RUN composer update
 RUN composer install
 RUN npm install
-RUN php artisan key:generate
-
 RUN npm run build
 
-# Expose port 8000 and start php-fpm server
-EXPOSE 8000
-CMD ["php-fpm"]
+#Laravel
+RUN php artisan key:generate
+
+#Storage
+RUN chown -R www-data:www-data /var/www/html/storage
+RUN php artisan storage:link
+
+#Database
+RUN touch /var/www/html/database/database.sqlite
+RUN chown www-data:www-data /var/www/html/database/database.sqlite
+RUN php artisan migrate:fresh --seed
+
+EXPOSE 80
+
+CMD service nginx start && php-fpm
