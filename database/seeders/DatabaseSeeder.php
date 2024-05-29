@@ -50,6 +50,11 @@ class DatabaseSeeder extends Seeder
                 'password' => 'password' . $i,
             ]));
         }
+        $users->push(User::factory()->create([
+            'email' => 'admin@admin.hu',
+            'password'=> 'password',
+            'isadmin' => true,
+        ]));
 
         $categories = collect();
         $categoryCount = rand(10, 20);
