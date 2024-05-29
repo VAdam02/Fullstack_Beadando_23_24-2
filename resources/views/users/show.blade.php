@@ -1,6 +1,4 @@
 <x-posts-layout title="Posts" :authorsPostCount="$authorsPostCount" :categoriesPostCount="$categoriesPostCount">
-    @vite(['resources/css/app.css','resources/js/app.js'])
-
     @include('users.partials.card')
 
     <h1 class="font-semibold mt-5 mb-3 text-3xl">Latest posts</h1>

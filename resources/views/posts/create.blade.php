@@ -1,6 +1,4 @@
 <x-posts-layout title="Post editor" :authorsPostCount="$authorsPostCount" :categoriesPostCount="$categoriesPostCount">
-    @vite(['resources/css/app.css','resources/js/app.js'])
-
     <div class="h-96" id="preview"></div>
 
     <form id="createform" action="{{ route('posts.store') }}" method="POST" enctype="multipart/form-data">
