@@ -34,7 +34,6 @@
                     @endauth
                     @guest
                     <a href="{{ route('login') }}" class="text-white">Login</a>
-                    <a href="{{ route('register') }}" class="text-white">Register</a>
                     @endguest
                 </div>
             </div>
